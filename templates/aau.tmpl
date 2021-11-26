@@ -1,0 +1,49 @@
+<style>
+    .navbar .navbar-brand {
+        height: 48px;
+        line-height: 19px;
+    }
+    [data-file="red_dot.svg"], .nav-pills, .leaflet-control-custom, .leaflet-bar-part, .history-control, .leaflet-control-boxzoom {
+        display: none !important;
+    }
+    .leaflet-top {
+        top: 0 !important;
+    }
+</style>
+<!-- map -->
+<div id="pane">
+    <div id="container">
+        <div id="map"></div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-bottom show" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-body" id="symbols">
+    </div>
+</div>
+<div
+        class="modal fade"
+        id="aau-step-modal"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="aau-step-modal-body"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                                Placér prik
+                            </button>
+                        </div>
+        </div>
+    </div>
+</div>
+
+<div id="confirm1" style="display: none" class="p-1 text-center w-100 fixed-top"><button disabled type="button" class="btn btn-primary">Placér pil</button></div>
+<div id="confirm2" style="display: none" class="p-1 text-center w-100 fixed-top"><button disabled type="button" class="btn btn-primary">Placér pil eller symbol</button></div>
+<div id="confirm3" style="display: none" class="p-1 text-center w-100 fixed-top"><button type="button" class="btn btn-success" id="vidi-symbols-store">Gem data og afslut</button></div>
+
+<script>
+    var bsOffcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasBottom'))
+    bsOffcanvas.show()
+</script>
