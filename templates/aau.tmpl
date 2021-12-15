@@ -12,6 +12,13 @@
     .offcanvas-bottom {
         height: 25vh;
     }
+    .flow-btn {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        z-index: 100000;
+        display: none;
+    }
 </style>
 <!-- map -->
 <div id="pane">
@@ -20,7 +27,10 @@
     </div>
 </div>
 
-<div class="offcanvas offcanvas-bottom show" tabindex="-1" id="offcanvasBottom" aria-labelledby="offcanvasRightLabel">
+<div class="offcanvas offcanvas-bottom show" id="offcanvasBottom" aria-labelledby="offcanvasRightLabel">
+    <div id="confirm1" class="flow-btn"><button disabled type="button" class="btn btn-primary">Næste</button></div>
+    <div id="confirm2" class="flow-btn"><button disabled type="button" class="btn btn-primary">Næste</button></div>
+    <div id="confirm3" class="flow-btn"><button type="button" class="btn btn-success" id="vidi-symbols-store">Afslut</button></div>
     <div class="offcanvas-body" id="symbols">
     </div>
 </div>
@@ -35,16 +45,13 @@
             <div class="modal-body" id="aau-step-modal-body"></div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
-                                Placér prik
+                                Næste
                             </button>
                         </div>
         </div>
     </div>
 </div>
 
-<div id="confirm1" style="display: none" class="p-1 text-center w-100 fixed-top"><button disabled type="button" class="btn btn-primary">Placér pil</button></div>
-<div id="confirm2" style="display: none" class="p-1 text-center w-100 fixed-top"><button disabled type="button" class="btn btn-primary">Placér pil eller symbol</button></div>
-<div id="confirm3" style="display: none" class="p-1 text-center w-100 fixed-top"><button type="button" class="btn btn-success" id="vidi-symbols-store">Gem data og afslut</button></div>
 
 <script>
     var bsOffcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasBottom'))

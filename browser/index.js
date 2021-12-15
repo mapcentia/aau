@@ -27,7 +27,7 @@ module.exports = {
      */
     init: function () {
 
-        $('#aau-step-modal-body').html(`Det første som du skal gøre er at zoome ind på kortet ved brug af knapperne til højre og placere en rød prik på kortet, hvor din trafikulykke skete. Den røde prik placeres på kortet ved et klik eller tryk på ulykkesstedet.`);
+        $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken skete, hvorfra du selv kom og hvorfra din modpart kom. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
         const modalEl = document.getElementById('aau-step-modal')
         const modal = new mdb.Modal(modalEl)
         modal.show()
@@ -60,17 +60,14 @@ module.exports = {
                     let id = symbols.createId();
                     symbols.createSymbol(innerHtml, id, [p.y, p.x], 0, 0, mapObj.getZoom(), file);
                     active = false;
-
-                    $('#aau-step-modal-body').html('Nu skal du markere på kortet, hvor du kom fra eller hvad du gjorde i ulykkessituationen. Det sker ved at trække pilene ind i kortet fra højre. Man rotere pilene inde i kortet.')
-
-                    const modalEl = document.getElementById('aau-step-modal')
-                    const modal = new mdb.Modal(modalEl)
-                    modal.show();
-                    $('#confirm1').show();
-                    const someTabTriggerEl = document.querySelector('#symbol-tab-1');
-                    const tab = new mdb.Tab(someTabTriggerEl);
-                    tab.show();
-                    $('#aau-step-modal').find('button').html('Placér pil')
+                    if (config?.extensionConfig?.symbols?.files?.length === 1) {
+                        $('#confirm3').show();
+                    } else {
+                        $('#confirm1').show();
+                        const someTabTriggerEl = document.querySelector('#symbol-tab-1');
+                        const tab = new mdb.Tab(someTabTriggerEl);
+                        tab.show();
+                    }
 
                 }, 250);
             }
@@ -96,16 +93,12 @@ $('#confirm1 button').click((e) => {
         console.log(countSymbols())
         $('#confirm1').hide();
         $('#confirm2').show();
-        $('#aau-step-modal-body').html(`Til sidst skal du markere på kortet, hvor din modpart kom fra eller hvad modparten gjorde ved at trække en pil eller et symbol ind fra højre.`);
-        const modalEl = document.getElementById('aau-step-modal')
-        const modal = new mdb.Modal(modalEl)
-        modal.show()
         const someTabTriggerEl = document.querySelector('#symbol-tab-2');
         const tab = new mdb.Tab(someTabTriggerEl);
         tab.show();
     }
     $('.symbols-delete').hide();
-    $('#aau-step-modal').find('button').html('Placér pil eller symbol')
+    $('#aau-step-modal').find('button').html('Næste')
 })
 
 
