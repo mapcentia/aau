@@ -14,10 +14,17 @@
     }
     .flow-btn {
         position: absolute;
-        right: 10px;
+        right: 110px;
         bottom: 10px;
         z-index: 100000;
         display: none;
+    }
+    .help-btn {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        z-index: 100000;
+        display: inline;
     }
 </style>
 <!-- map -->
@@ -31,12 +38,14 @@
     <div id="confirm1" class="flow-btn"><button disabled type="button" class="btn btn-primary">Næste</button></div>
     <div id="confirm2" class="flow-btn"><button disabled type="button" class="btn btn-primary">Næste</button></div>
     <div id="confirm3" class="flow-btn"><button type="button" class="btn btn-success" id="vidi-symbols-store">Afslut</button></div>
+    <div class="help-btn"><button type="button" class="btn btn-outline-primary">Hjælp</button></div>
     <div class="offcanvas-body" id="symbols">
     </div>
 </div>
 <div
         class="modal fade"
         id="aau-step-modal"
+        tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
 >
@@ -48,6 +57,26 @@
                                 Næste
                             </button>
                         </div>
+        </div>
+    </div>
+</div>
+<div
+        class="modal fade"
+        id="aau-help-modal"
+        tabindex="-1"
+        aria-labelledby="exampleModalLabel"
+        aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/UBZqnrfJabI" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">
+                    Luk
+                </button>
+            </div>
         </div>
     </div>
 </div>

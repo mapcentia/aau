@@ -7,6 +7,9 @@ let clicktimer;
 let active = true;
 const config = require('../../../config/config.js');
 
+const modalHelp = document.getElementById('aau-help-modal')
+const modalElHelp = new mdb.Modal(modalHelp)
+
 module.exports = {
 
     /**
@@ -27,10 +30,18 @@ module.exports = {
      */
     init: function () {
 
-        $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken skete, hvorfra du selv kom og hvorfra din modpart kom. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+        if (config.extensionConfig.symbols.options?.flag === 1) {
+            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken (fald) skete. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+        } else if (config.extensionConfig.symbols.options?.flag === 2) {
+
+            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken (fald) skete og hvorfra du selv kom. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+        } else {
+            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken skete, hvorfra du selv kom og hvorfra din modpart kom. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+        }
         const modalEl = document.getElementById('aau-step-modal')
         const modal = new mdb.Modal(modalEl)
         modal.show()
+
 
         /**
          *
@@ -75,7 +86,8 @@ module.exports = {
     }
 
 };
-$('#confirm1 button').click((e) => {
+$('#confirm1 button'
+).click((e) => {
     const c = countSymbols();
     if (c < 2) {
         alert(`Du skal placere en pil`);
@@ -115,6 +127,9 @@ $('#confirm2 button').click(() => {
     $('#confirm2').hide();
     $('#confirm3').show();
     $('.symbols-delete').hide();
+})
+$('.help-btn button').click(() => {
+    modalElHelp.show()
 })
 
 const countSymbols = () => {
