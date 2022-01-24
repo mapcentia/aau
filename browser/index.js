@@ -5,11 +5,14 @@ let symbols;
 let mapObj;
 let clicktimer;
 let active = true;
+let currentZoom;
 const config = require('../../../config/config.js');
 
-const modalHelp = document.getElementById('aau-help-modal')
-const modalElHelp = new mdb.Modal(modalHelp)
+const modalHelp = document.getElementById('aau-help-modal');
+const modalElHelp = new mdb.Modal(modalHelp);
+const SWITCH_LEVEL = 16;
 
+let setBaseLayer;
 module.exports = {
 
     /**
@@ -20,6 +23,7 @@ module.exports = {
     set: function (o) {
         cloud = o.cloud;
         utils = o.utils;
+        setBaseLayer = o.setBaseLayer;
         transformPoint = o.transformPoint;
         symbols = o.extensions.symbols.index;
         return this;
@@ -48,10 +52,10 @@ module.exports = {
          * Native Leaflet object
          */
         mapObj = cloud.get().map;
-        mapObj.on("dblclick", function () {
+        mapObj.on('dblclick', function () {
             clicktimer = undefined;
         });
-        mapObj.on("click", function (e) {
+        mapObj.on('click', function (e) {
             let event = new geocloud.clickEvent(e, cloud);
             if (clicktimer) {
                 clearTimeout(clicktimer);
@@ -83,11 +87,28 @@ module.exports = {
                 }, 250);
             }
         });
+        mapObj.on('zoomend', () => {
+            const z = mapObj.getZoom();
+            switchBaseLayer(z);
+            currentZoom = z;
+        });
+        const z = mapObj.getZoom();
+        currentZoom = z;
+        switchBaseLayer(z, true);
     }
 
 };
-$('#confirm1 button'
-).click((e) => {
+const switchBaseLayer = (z, init = false) => {
+    if (z > SWITCH_LEVEL && (currentZoom <= SWITCH_LEVEL || init)) {
+        setBaseLayer.init('geodanmark_2020_12_5cm');
+    }
+
+    if (z <= SWITCH_LEVEL && (currentZoom > SWITCH_LEVEL || init)) {
+        setBaseLayer.init('osm');
+    }
+}
+
+$('#confirm1 button').click((e) => {
     const c = countSymbols();
     if (c < 2) {
         alert(`Du skal placere en pil`);
