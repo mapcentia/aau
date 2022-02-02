@@ -94,7 +94,7 @@ module.exports = {
         });
         const z = mapObj.getZoom();
         currentZoom = z;
-        switchBaseLayer(z, true);
+        // switchBaseLayer(z, true);
     }
 
 };
