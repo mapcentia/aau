@@ -10,7 +10,7 @@ const config = require('../../../config/config.js');
 
 const modalHelp = document.getElementById('aau-help-modal');
 const modalElHelp = new mdb.Modal(modalHelp);
-const SWITCH_LEVEL = 16;
+const SWITCH_LEVEL = 19;
 
 let setBaseLayer;
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
     init: function () {
 
         if (config.extensionConfig.symbols.options?.flag === 1) {
-            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken (fald) skete. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor du faldt. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
         } else if (config.extensionConfig.symbols.options?.flag === 2) {
 
             $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken (fald) skete og hvorfra du selv kom. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
@@ -151,6 +151,12 @@ $('#confirm2 button').click(() => {
 })
 $('.help-btn button').click(() => {
     modalElHelp.show()
+})
+$('.reset-btn button').click(() => {
+    if (confirm("Er du sikker på, at du vil starte forfra med registrering i kortet?")) {
+        location.hash = '';
+        location.reload();
+    }
 })
 
 const countSymbols = () => {
