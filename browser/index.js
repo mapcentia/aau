@@ -6,6 +6,8 @@ let mapObj;
 let clicktimer;
 let active = true;
 let currentZoom;
+const cookie = require('js-cookie');
+const urlparser = require('../../../browser/modules/urlparser');
 const config = require('../../../config/config.js');
 
 const modalHelp = document.getElementById('aau-help-modal');
@@ -46,6 +48,11 @@ module.exports = {
         const modal = new mdb.Modal(modalEl)
         modal.show()
 
+        // Set browserId eq to the survey-xact user id
+        const userId = urlparser.urlVars?.userid;
+        if (userId) {
+            cookie.set('vidi-state-tracker', userId, {expires: 365});
+        }
 
         /**
          *
@@ -76,7 +83,13 @@ module.exports = {
                     symbols.createSymbol(innerHtml, id, [p.y, p.x], 0, 0, mapObj.getZoom(), file);
                     active = false;
                     if (config?.extensionConfig?.symbols?.files?.length === 1) {
-                        $('#confirm3').show();
+                        $('#confirm2').show();
+                    } else if(config?.extensionConfig?.symbols?.files?.length === 2) {
+                        $('#confirm2').show();
+                        const someTabTriggerEl = document.querySelector('#symbol-tab-1');
+                        const tab = new mdb.Tab(someTabTriggerEl);
+                        tab.show();
+
                     } else {
                         $('#confirm1').show();
                         const someTabTriggerEl = document.querySelector('#symbol-tab-1');
@@ -120,10 +133,9 @@ $('#confirm1 button').click((e) => {
     }
 
     if (config?.extensionConfig?.symbols?.files?.length === 2) {
-        $('#confirm3').show();
+        $('#confirm1').hide();
+        $('#confirm2').show();
     } else {
-
-        console.log(countSymbols())
         $('#confirm1').hide();
         $('#confirm2').show();
         const someTabTriggerEl = document.querySelector('#symbol-tab-2');
@@ -137,7 +149,7 @@ $('#confirm1 button').click((e) => {
 
 $('#confirm2 button').click(() => {
     const c = countSymbols();
-    if (c < 3) {
+    if (c < 1) {
         alert(`Du skal placere en pil`);
         return;
     }
@@ -145,8 +157,7 @@ $('#confirm2 button').click(() => {
         alert(`Du må kun placere en pil. Slet venligst en eller flere`);
         return;
     }
-    $('#confirm2').hide();
-    $('#confirm3').show();
+    $('#confirm2').show();
     $('.symbols-delete').hide();
 })
 $('.help-btn button').click(() => {
