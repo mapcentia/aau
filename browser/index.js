@@ -37,12 +37,11 @@ module.exports = {
     init: function () {
 
         if (config.extensionConfig.symbols.options?.flag === 1) {
-            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor du faldt. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
         } else if (config.extensionConfig.symbols.options?.flag === 2) {
-
-            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken (fald) skete og hvorfra du selv kom. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete, og hvad der skete. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
         } else {
-            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor ulykken skete, hvorfra du selv kom og hvorfra din modpart kom. Klik næste, når du er klar - og følg vejledningen nedenfor.`);
+            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete, hvorfra du kom, og hvorfra din modpart kom. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
         }
         const modalEl = document.getElementById('aau-step-modal')
         const modal = new mdb.Modal(modalEl)
