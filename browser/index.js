@@ -50,7 +50,7 @@ module.exports = {
         // Set browserId eq to the survey-xact user id
         const userId = urlparser.urlVars?.userid;
         if (userId) {
-            cookie.set('vidi-state-tracker', userId, {expires: 365});
+            cookie.set('vidi-state-tracker', userId, {expires: 365, secure: true, sameSite: 'none'});
         }
 
         /**
