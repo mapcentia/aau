@@ -47,11 +47,8 @@ module.exports = {
         const modal = new mdb.Modal(modalEl)
         modal.show()
 
-        // Set browserId eq to the survey-xact user id
-        const userId = urlparser.urlVars?.userid;
-        if (userId) {
-            cookie.set('vidi-state-tracker', userId, {expires: 365, secure: true, sameSite: 'none'});
-        }
+        window.aauUserId = urlparser.urlVars?.userid || 'Ikke registreret';
+
 
         /**
          *
