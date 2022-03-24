@@ -110,10 +110,12 @@ module.exports = {
 const switchBaseLayer = (z, init = false) => {
     if (z > SWITCH_LEVEL && (currentZoom <= SWITCH_LEVEL || init)) {
         setBaseLayer.init('geodanmark_2020_12_5cm');
+        $('.symbols-lib').css('opacity', '100%');
     }
 
     if (z <= SWITCH_LEVEL && (currentZoom > SWITCH_LEVEL || init)) {
         setBaseLayer.init('osm');
+        $('.symbols-lib').css('opacity', '10%');
     }
 }
 
