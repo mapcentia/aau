@@ -66,9 +66,11 @@ module.exports = {
                 if (active === false) {
                     return;
                 }
-
+                if (currentZoom < SWITCH_LEVEL) {
+                    alert('Du skal zooom tættere på inden du kan starte. Zoom indtil kortet skifter til luftfoto.');
+                    return;
+                }
                 clicktimer = setTimeout(function () {
-
                     let coords = event.getCoordinate(), p, url;
                     p = utils.transform("EPSG:3857", "EPSG:4326", coords);
                     clicktimer = undefined;
@@ -78,9 +80,11 @@ module.exports = {
                     let id = symbols.createId();
                     symbols.createSymbol(innerHtml, id, [p.y, p.x], 0, 0, mapObj.getZoom(), file);
                     active = false;
+                    $('.symbols-cover-text').css('opacity', '100%');
+                    if (currentZoom <= SWITCH_LEVEL) $('.symbols-cover-text').show();
                     if (config?.extensionConfig?.symbols?.files?.length === 1) {
                         $('#confirm2').show();
-                    } else if(config?.extensionConfig?.symbols?.files?.length === 2) {
+                    } else if (config?.extensionConfig?.symbols?.files?.length === 2) {
                         $('#confirm2').show();
                         const someTabTriggerEl = document.querySelector('#symbol-tab-1');
                         const tab = new mdb.Tab(someTabTriggerEl);
@@ -99,24 +103,54 @@ module.exports = {
         mapObj.on('zoomend', () => {
             const z = mapObj.getZoom();
             switchBaseLayer(z);
+            switchSymbolsCover(z);
             currentZoom = z;
         });
         const z = mapObj.getZoom();
         currentZoom = z;
         // switchBaseLayer(z, true);
+        switchSymbolsCover(z);
     }
 
 };
 const switchBaseLayer = (z, init = false) => {
     if (z > SWITCH_LEVEL && (currentZoom <= SWITCH_LEVEL || init)) {
         setBaseLayer.init('geodanmark_2020_12_5cm');
-        $('.symbols-lib').css('opacity', '100%');
     }
 
     if (z <= SWITCH_LEVEL && (currentZoom > SWITCH_LEVEL || init)) {
         setBaseLayer.init('osm');
-        $('.symbols-lib').css('opacity', '10%');
     }
+}
+
+const switchSymbolsCover = (z) => {
+    let opacity = '100%';
+    let pointerEvents = 'none';
+    let display = 'inline';
+    if (z > SWITCH_LEVEL) {
+        opacity = '100%'
+        pointerEvents = 'auto';
+        display = 'none';
+    } else {
+        opacity = '10%'
+        pointerEvents = 'none';
+        display = 'inline';
+    }
+    const poll = () => {
+        const e = $('.symbols-cover');
+        const t = $('.symbols-cover-text');
+
+        if (e.length > 0 && t.length > 0) {
+            e.css('opacity', opacity);
+            e.css('pointer-events', pointerEvents);
+            t.css('display', display);
+        } else {
+            setTimeout(() => {
+                poll();
+            }, 50)
+        }
+    }
+    poll();
 }
 
 $('#confirm1 button').click((e) => {
