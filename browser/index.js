@@ -67,7 +67,7 @@ module.exports = {
                     return;
                 }
                 if (currentZoom < SWITCH_LEVEL) {
-                    alert('Du skal zooom tættere på inden du kan starte. Zoom indtil kortet skifter til luftfoto.');
+                    alert('Du skal zoome tættere på, inden du kan markere, hvor det skete. Zoom ind, indtil kortet skifter til et luftfoto.');
                     return;
                 }
                 clicktimer = setTimeout(function () {
