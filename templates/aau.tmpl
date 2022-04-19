@@ -10,7 +10,25 @@
         top: 0 !important;
     }
     .offcanvas-bottom {
-        height: 25vh;
+        height: 27vh;
+    }
+    @media (max-width: 600px) {
+        .offcanvas-bottom {
+            height: 300px;
+        }
+        .symbol-text-wrapper {
+            transform:scale(0.75);
+            width: 45px;
+        }
+        .symbols-desc {
+            font-size: 0.8rem;
+        }
+        #confirm2 span {
+            display: none;
+        }
+        .p-1 {
+             padding: 0 !important;
+        }
     }
     .flow-btn {
         position: absolute;
