@@ -48,6 +48,7 @@ module.exports = {
         modal.show()
 
         window.aauUserId = urlparser.urlVars?.userid || 'Ikke registreret';
+        window.aauUserGr = urlparser.urlVars?.gr || 'Ikke registreret';
 
 
         /**
