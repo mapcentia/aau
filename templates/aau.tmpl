@@ -10,12 +10,10 @@
         top: 0 !important;
     }
     .offcanvas-bottom {
-        height: 285px;
+        height: fit-content;
+        min-height: 190px;
     }
-    @media (max-width: 600px) {
-        .offcanvas-bottom {
-            height: 300px;
-        }
+    @media (max-width: 1000px) {
         .symbol-text-wrapper {
             transform:scale(0.75);
             width: 45px;
@@ -31,24 +29,24 @@
         }
     }
     .flow-btn {
-        position: absolute;
-        right: 250px;
-        bottom: 10px;
-        z-index: 100000;
+        /*position: absolute;*/
+        /*right: 210px;*/
+        /*bottom: 10px;*/
+        /*z-index: 100000;*/
         display: none;
     }
     .help-btn {
-        position: absolute;
-        right: 150px;
-        bottom: 10px;
-        z-index: 100000;
+        /*position: absolute;*/
+        /*right: 130px;*/
+        /*bottom: 10px;*/
+        /*z-index: 100000;*/
         display: inline;
     }
     .reset-btn {
-        position: absolute;
-        right: 10px;
-        bottom: 10px;
-        z-index: 100000;
+        /*position: absolute;*/
+        /*right: 10px;*/
+        /*bottom: 10px;*/
+        /*z-index: 100000;*/
         display: inline;
     }
 </style>
@@ -60,11 +58,14 @@
 </div>
 
 <div class="offcanvas offcanvas-bottom show" id="offcanvasBottom" aria-labelledby="offcanvasRightLabel">
-    <div id="reset" class="reset-btn"><button type="button" class="btn btn-outline-danger" data-mdb-ripple-color="dark">Start forfra</button></div>
-    <div id="confirm1" class="flow-btn"><button disabled type="button" class="btn btn-primary">Næste</button></div>
-    <div id="confirm2" class="flow-btn"><span style="line-height: 34px; margin-right: 10px">Tryk på Gem, når du er færdig</span><button disabled type="button" class="btn btn-success" id="vidi-symbols-store">Gem</button></div>
-    <div class="help-btn"><button type="button" class="btn btn-outline-primary" data-mdb-ripple-color="dark">Hjælp</button></div>
-    <div class="offcanvas-body" id="symbols">
+    <div style="display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; height: 100%; padding: 1px; gap: 5px">
+        <div class="offcanvas-body" id="symbols" style="overflow-y: auto; padding: 0"></div>
+        <div style="display: flex; gap: 5px; flex-direction: row-reverse; flex-wrap: wrap;">
+            <div id="reset" class="reset-btn"><button type="button" class="btn btn-outline-danger btn-sm" data-mdb-ripple-color="dark">Start forfra</button></div>
+            <div class="help-btn"><button type="button" class="btn btn-outline-primary btn-sm" data-mdb-ripple-color="dark">Hjælp</button></div>
+            <div id="confirm1" class="flow-btn"><button disabled type="button" class="btn btn-primary btn-sm">Næste</button></div>
+            <div id="confirm2" class="flow-btn"><span style="margin-right: 10px">Tryk på Gem, når du er færdig</span><button disabled type="button" class="btn btn-success btn-sm" id="vidi-symbols-store">Gem</button></div>
+        </div>
     </div>
 </div>
 <div
