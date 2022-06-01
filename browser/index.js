@@ -80,6 +80,7 @@ module.exports = {
                     let innerHtml = $(`[data-file='${file}']`).clone().html();
                     let id = symbols.createId();
                     symbols.createSymbol(innerHtml, id, [p.y, p.x], 0, 0, mapObj.getZoom(), file);
+                    symbols.store('i1', false);
                     active = false;
                     $('.symbols-cover-text').css('opacity', '100%');
                     if (currentZoom <= SWITCH_LEVEL) $('.symbols-cover-text').show();
@@ -176,7 +177,8 @@ $('#confirm1 button').click((e) => {
         tab.show();
     }
     $('.symbols-delete').hide();
-    $('#aau-step-modal').find('button').html('Næste')
+    $('#aau-step-modal').find('button').html('Næste');
+    symbols.store('i2', false);
 })
 
 
