@@ -80,7 +80,7 @@ module.exports = {
                     let innerHtml = $(`[data-file='${file}']`).clone().html();
                     let id = symbols.createId();
                     symbols.createSymbol(innerHtml, id, [p.y, p.x], 0, 0, mapObj.getZoom(), file);
-                    symbols.store('i1', false);
+                    symbols.store('i1');
                     active = false;
                     $('.symbols-cover-text').css('opacity', '100%');
                     if (currentZoom <= SWITCH_LEVEL) $('.symbols-cover-text').show();
@@ -155,7 +155,20 @@ const switchSymbolsCover = (z) => {
     poll();
 }
 
-$('#confirm1 button').click((e) => {
+$('#vidi-symbols-store').on('click', () => {
+    symbols.store('f').then((e) => {
+            $('#vidi-symbols-store').attr('disabled', true);
+            $('#aau-reset').attr('disabled', true);
+            $('#aau-help').attr('disabled', true);
+            window.parent.postMessage({type: "doneCallback", symbolState: symbolState}, "*");
+        },
+        (e) => {
+            console.log("Error", e);
+            alert("Noget gik galt - prøv igen");
+        }
+    )
+});
+$('#confirm1').click((e) => {
     const c = countSymbols();
     if (c < 2) {
         alert(`Du skal placere en pil`);
@@ -178,11 +191,11 @@ $('#confirm1 button').click((e) => {
     }
     $('.symbols-delete').hide();
     $('#aau-step-modal').find('button').html('Næste');
-    symbols.store('i2', false);
+    symbols.store('i2');
 })
 
 
-$('#confirm2 button').click(() => {
+$('#confirm2').click(() => {
     const c = countSymbols();
     if (c < 1) {
         alert(`Du skal placere en pil`);
@@ -195,10 +208,10 @@ $('#confirm2 button').click(() => {
     $('#confirm2').show();
     $('.symbols-delete').hide();
 })
-$('.help-btn button').click(() => {
+$('#aau-help').click(() => {
     modalElHelp.show()
 })
-$('.reset-btn button').click(() => {
+$('#aau-reset').click(() => {
     if (confirm("Er du sikker på, at du vil starte forfra med registrering i kortet?")) {
         location.hash = '';
         location.reload();
