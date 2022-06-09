@@ -157,10 +157,11 @@ const switchSymbolsCover = (z) => {
 
 $('#vidi-symbols-store').on('click', () => {
     symbols.store('f').then((e) => {
+            symbols.lock();
             $('#vidi-symbols-store').attr('disabled', true);
             $('#aau-reset').attr('disabled', true);
             $('#aau-help').attr('disabled', true);
-            window.parent.postMessage({type: "doneCallback", symbolState: symbolState}, "*");
+            window.parent.postMessage({type: "doneCallback", symbolState: symbols.getState().symbolState}, "*");
         },
         (e) => {
             console.log("Error", e);
