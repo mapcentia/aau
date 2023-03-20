@@ -78,7 +78,7 @@ module.exports = {
                 if (active === false) {
                     return;
                 }
-                if (currentZoom < SWITCH_LEVEL) {
+                if (currentZoom <= SWITCH_LEVEL) {
                     alert('Du skal zoome tættere på, inden du kan markere, hvor det skete. Zoom ind, indtil kortet skifter til et luftfoto.');
                     return;
                 }
