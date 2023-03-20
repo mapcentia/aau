@@ -52,7 +52,15 @@ module.exports = {
         // Override browser and user id
         window._browserId = urlparser.urlVars?.userid || 'Ikke registreret';
         window._userId = urlparser.urlVars?.gr || 'Ikke registreret';
-
+        // Try to set props
+        try {
+            if (urlparser.urlVars?.props) {
+                window._props = JSON.parse(urlparser.urlVars.props);
+            }
+        } catch (e) {
+            console.info("Error in props json - setting it to null");
+            window._props =  null;
+        }
 
         /**
          *
