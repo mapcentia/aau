@@ -6,12 +6,12 @@ let mapObj;
 let clicktimer;
 let active = true;
 let currentZoom;
+let modalHelp;
+let modalElHelp;
 const cookie = require('js-cookie');
 const urlparser = require('../../../browser/modules/urlparser');
 const config = require('../../../config/config.js');
 
-const modalHelp = document.getElementById('aau-help-modal');
-const modalElHelp = new bootstrap.Modal(modalHelp);
 const SWITCH_LEVEL = 19;
 
 let setBaseLayer;
@@ -36,6 +36,8 @@ module.exports = {
      */
     init: function () {
 
+        modalHelp = document.getElementById('aau-help-modal');
+        modalElHelp = new bootstrap.Modal(modalHelp);
         if (config.extensionConfig.symbols.options?.flag === 1) {
             $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
         } else if (config.extensionConfig.symbols.options?.flag === 2) {
