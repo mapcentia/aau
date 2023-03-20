@@ -11,7 +11,7 @@ const urlparser = require('../../../browser/modules/urlparser');
 const config = require('../../../config/config.js');
 
 const modalHelp = document.getElementById('aau-help-modal');
-const modalElHelp = new mdb.Modal(modalHelp);
+const modalElHelp = new bootstrap.Modal(modalHelp);
 const SWITCH_LEVEL = 19;
 
 let setBaseLayer;
@@ -44,7 +44,7 @@ module.exports = {
             $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete, hvorfra du kom, og hvorfra din modpart kom. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
         }
         const modalEl = document.getElementById('aau-step-modal')
-        const modal = new mdb.Modal(modalEl)
+        const modal = new bootstrap.Modal(modalEl)
         modal.show()
 
         window.aauUserId = urlparser.urlVars?.userid || 'Ikke registreret';
@@ -89,13 +89,13 @@ module.exports = {
                     } else if (config?.extensionConfig?.symbols?.files?.length === 2) {
                         $('#confirm2').show();
                         const someTabTriggerEl = document.querySelector('#symbol-tab-1');
-                        const tab = new mdb.Tab(someTabTriggerEl);
+                        const tab = new bootstrap.Tab(someTabTriggerEl);
                         tab.show();
 
                     } else {
                         $('#confirm1').show();
                         const someTabTriggerEl = document.querySelector('#symbol-tab-1');
-                        const tab = new mdb.Tab(someTabTriggerEl);
+                        const tab = new bootstrap.Tab(someTabTriggerEl);
                         tab.show();
                     }
 
@@ -187,7 +187,7 @@ $('#confirm1').click((e) => {
         $('#confirm1').hide();
         $('#confirm2').show();
         const someTabTriggerEl = document.querySelector('#symbol-tab-2');
-        const tab = new mdb.Tab(someTabTriggerEl);
+        const tab = new bootstrap.Tab(someTabTriggerEl);
         tab.show();
     }
     $('.symbols-delete').hide();
