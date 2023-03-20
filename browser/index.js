@@ -47,8 +47,9 @@ module.exports = {
         const modal = new bootstrap.Modal(modalEl)
         modal.show()
 
-        window.aauUserId = urlparser.urlVars?.userid || 'Ikke registreret';
-        window.aauUserGr = urlparser.urlVars?.gr || 'Ikke registreret';
+        // Override browser and user id
+        window._browserId = urlparser.urlVars?.userid || 'Ikke registreret';
+        window._userId = urlparser.urlVars?.gr || 'Ikke registreret';
 
 
         /**
