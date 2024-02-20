@@ -8,7 +8,9 @@ let active = true;
 let currentZoom;
 let modalHelp;
 let modalElHelp;
-const cookie = require('js-cookie');
+let layerTree;
+let backboneEvents;
+let switchLayer;
 const urlparser = require('../../../browser/modules/urlparser');
 const config = require('../../../config/config.js');
 
@@ -27,6 +29,9 @@ module.exports = {
         utils = o.utils;
         setBaseLayer = o.setBaseLayer;
         transformPoint = o.transformPoint;
+        backboneEvents = o.backboneEvents;
+        layerTree = o.layerTree;
+        switchLayer = o.switchLayer;
         symbols = o.extensions.symbols.index;
         return this;
     },
@@ -92,22 +97,22 @@ module.exports = {
         });
         $('#confirm1').click((e) => {
             const c = countSymbols();
-            if (c < 2) {
+            if (c < 1) {
                 alert(`Du skal placere en pil`);
                 return;
             }
-            if (c > 2) {
+            if (c > 1) {
                 alert(`Du må kun placere en pil. Slet venligst en eller flere`);
                 return;
             }
 
-            if (config?.extensionConfig?.symbols?.files?.length === 2) {
+            if (config?.extensionConfig?.symbols?.files?.length === 1) {
                 $('#confirm1').hide();
                 $('#confirm2').show();
             } else {
                 $('#confirm1').hide();
                 $('#confirm2').show();
-                const someTabTriggerEl = document.querySelector('#symbol-tab-2');
+                const someTabTriggerEl = document.querySelector('#symbol-tab-1');
                 const tab = new bootstrap.Tab(someTabTriggerEl);
                 tab.show();
             }
@@ -123,7 +128,7 @@ module.exports = {
                 alert(`Du skal placere en pil`);
                 return;
             }
-            if (c > 3) {
+            if (c > 2) {
                 alert(`Du må kun placere en pil. Slet venligst en eller flere`);
                 return;
             }
@@ -168,7 +173,7 @@ module.exports = {
             }
         } catch (e) {
             console.info("Error in props json - setting it to null");
-            window._props =  null;
+            window._props = null;
         }
 
         /**
@@ -179,49 +184,72 @@ module.exports = {
         mapObj.on('dblclick', function () {
             clicktimer = undefined;
         });
-        mapObj.on('click', function (e) {
-            let event = new geocloud.clickEvent(e, cloud);
-            if (clicktimer) {
-                clearTimeout(clicktimer);
-            } else {
-                if (active === false) {
-                    return;
-                }
-                if (currentZoom <= SWITCH_LEVEL) {
-                    alert('Du skal zoome tættere på, inden du kan markere, hvor det skete. Zoom ind, indtil kortet skifter til et luftfoto.');
-                    return;
-                }
-                clicktimer = setTimeout(function () {
-                    let coords = event.getCoordinate(), p, url;
-                    p = utils.transform("EPSG:3857", "EPSG:4326", coords);
-                    clicktimer = undefined;
-
-                    let file = 'red_dot.svg';
-                    let innerHtml = $(`[data-file='${file}']`).clone().html();
-                    let id = symbols.createId();
-                    symbols.createSymbol(innerHtml, id, [p.y, p.x], 0, 0, mapObj.getZoom(), file);
-                    symbols.store('i1');
-                    active = false;
-                    $('.symbols-cover-text').css('opacity', '100%');
-                    if (currentZoom <= SWITCH_LEVEL) $('.symbols-cover-text').show();
-                    if (config?.extensionConfig?.symbols?.files?.length === 1) {
-                        $('#confirm2').show();
-                    } else if (config?.extensionConfig?.symbols?.files?.length === 2) {
-                        $('#confirm2').show();
-                        const someTabTriggerEl = document.querySelector('#symbol-tab-1');
-                        const tab = new bootstrap.Tab(someTabTriggerEl);
-                        tab.show();
-
-                    } else {
-                        $('#confirm1').show();
-                        const someTabTriggerEl = document.querySelector('#symbol-tab-1');
-                        const tab = new bootstrap.Tab(someTabTriggerEl);
-                        tab.show();
+        if (urlparser.urlVars?.start === '1') {
+            $('#confirm2').show();
+            mapObj.on('click', function (e) {
+                let event = new geocloud.clickEvent(e, cloud);
+                if (clicktimer) {
+                    clearTimeout(clicktimer);
+                } else {
+                    if (active === false) {
+                        return;
                     }
+                    if (currentZoom <= SWITCH_LEVEL) {
+                        alert('Du skal zoome tættere på, inden du kan markere, hvor det skete. Zoom ind, indtil kortet skifter til et luftfoto.');
+                        return;
+                    }
+                    clicktimer = setTimeout(function () {
+                        let coords = event.getCoordinate(), p, url;
+                        p = utils.transform("EPSG:3857", "EPSG:4326", coords);
+                        clicktimer = undefined;
 
-                }, 250);
-            }
-        });
+                        let file = 'red_dot.svg';
+                        let innerHtml = $(`[data-file='${file}']`).clone().html();
+                        let id = symbols.createId();
+                        symbols.createSymbol(innerHtml, id, [p.y, p.x], 0, 0, mapObj.getZoom(), file);
+                        symbols.store('i1');
+                        active = false;
+                        $('.symbols-cover-text').css('opacity', '100%');
+                        if (currentZoom <= SWITCH_LEVEL) $('.symbols-cover-text').show();
+
+                    }, 250);
+                }
+            });
+        } else {
+            let flag = false
+            backboneEvents.get().on(`layerTree:ready`, (loadedLayerName) => {
+                if (!flag) {
+                    let filters =
+                        {
+                            "match": "all",
+                            "columns": [
+                                {
+                                    "fieldname": "browserid",
+                                    "expression": "=",
+                                    "value": urlparser.urlVars.userid,
+                                    "restriction": false
+                                }, {
+                                    "fieldname": "file",
+                                    "expression": "=",
+                                    "value": "red_dot.svg",
+                                    "restriction": false
+                                }
+                            ]
+                        }
+                    layerTree.onApplyArbitraryFiltersHandler({layerKey: 'public.symbols', filters});
+                    switchLayer.init('v:public.symbols', true).then(() => {
+                        const map = cloud.get();
+                        setTimeout(() => {
+                            const layer = map.getLayersByName('v:public.symbols');
+                            map.map.fitBounds(layer.getBounds(), 20)
+                        }, 1000);
+
+                    })
+                    flag = true;
+                }
+            })
+            $('#confirm1').show();
+        }
         mapObj.on('zoomend', () => {
             const z = mapObj.getZoom();
             switchBaseLayer(z);
