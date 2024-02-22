@@ -248,7 +248,11 @@ module.exports = {
                     flag = true;
                 }
             })
-            $('#confirm1').show();
+            if (config.extensionConfig.symbols.options?.flag === 2) {
+                $('#confirm2').show();
+            } else {
+                $('#confirm1').show();
+            }
         }
         mapObj.on('zoomend', () => {
             const z = mapObj.getZoom();
