@@ -152,13 +152,7 @@ module.exports = {
 
         modalHelp = document.getElementById('aau-help-modal');
         modalElHelp = new bootstrap.Modal(modalHelp);
-        if (config.extensionConfig.symbols.options?.flag === 1) {
-            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
-        } else if (config.extensionConfig.symbols.options?.flag === 2) {
-            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete, og hvad der skete. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
-        } else {
-            $('#aau-step-modal-body').html(`På dette kort skal du markere, hvor hændelsen skete, hvorfra du kom, og hvorfra din modpart kom. Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
-        }
+        $('#aau-step-modal-body').html(`Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
         const modalEl = document.getElementById('aau-step-modal')
         const modal = new bootstrap.Modal(modalEl)
         modal.show()
