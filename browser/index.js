@@ -85,7 +85,7 @@ module.exports = {
             symbols.store('f').then((e) => {
                     symbols.lock();
                     $('#vidi-symbols-store').attr('disabled', true);
-                    $('#aau-reset').attr('disabled', true);
+                    $('#aau-reset-confirm').attr('disabled', true);
                     $('#aau-help').attr('disabled', true);
                     window.parent.postMessage({type: "doneCallback", symbolState: symbols.getState().symbolState}, "*");
                 },
@@ -135,14 +135,18 @@ module.exports = {
             $('#confirm2').show();
             $('.symbols-delete').hide();
         })
+
         $('#aau-help').click(() => {
             modalElHelp.show()
         })
+
+        $('#aau-reset-confirm').click(() => {
+            new bootstrap.Modal('#restartConfirm').show();
+        })
+
         $('#aau-reset').click(() => {
-            if (confirm("Er du sikker på, at du vil starte forfra med registrering i kortet?")) {
                 location.hash = '';
                 location.reload();
-            }
         })
 
         const countSymbols = () => {
@@ -152,7 +156,7 @@ module.exports = {
 
         modalHelp = document.getElementById('aau-help-modal');
         modalElHelp = new bootstrap.Modal(modalHelp);
-        $('#aau-step-modal-body').html(`Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
+        $('#aau-step-modal-body').html(`Zoom ind, indtil kortet skifter til et luftfoto. Klik eller tryk på kortet for at angive stedet. Flyt prikken ved at trykke og holde, mens du flytter den.`);
         const modalEl = document.getElementById('aau-step-modal')
         const modal = new bootstrap.Modal(modalEl)
         modal.show()
@@ -232,13 +236,13 @@ module.exports = {
                         }
                     layerTree.onApplyArbitraryFiltersHandler({layerKey: 'public.symbols', filters});
                     switchLayer.init('v:public.symbols', true).then(() => {
-                        const map = cloud.get();
-                        setTimeout(() => {
-                            const layer = map.getLayersByName('v:public.symbols');
-                            map.map.fitBounds(layer.getBounds(), 20)
-                        }, 1000);
 
                     })
+                    backboneEvents.get().once("allDoneLoading:layers", function (e) {
+                        const map = cloud.get();
+                        const layer = map.getLayersByName('v:public.symbols');
+                        map.map.fitBounds(layer.getBounds(), {maxZoom: 19})
+                    });
                     flag = true;
                 }
             })
