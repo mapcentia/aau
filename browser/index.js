@@ -156,7 +156,7 @@ module.exports = {
 
         modalHelp = document.getElementById('aau-help-modal');
         modalElHelp = new bootstrap.Modal(modalHelp);
-        $('#aau-step-modal-body').html(`Zoom ind, indtil kortet skifter til et luftfoto. Klik eller tryk på kortet for at angive stedet. Flyt prikken ved at trykke og holde, mens du flytter den.`);
+        $('#aau-step-modal-body').html(`Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
         const modalEl = document.getElementById('aau-step-modal')
         const modal = new bootstrap.Modal(modalEl)
         modal.show()
@@ -241,7 +241,7 @@ module.exports = {
                     backboneEvents.get().once("allDoneLoading:layers", function (e) {
                         const map = cloud.get();
                         const layer = map.getLayersByName('v:public.symbols');
-                        map.map.fitBounds(layer.getBounds(), {maxZoom: 19})
+                        map.map.fitBounds(layer.getBounds(), {maxZoom: 20})
                     });
                     flag = true;
                 }
