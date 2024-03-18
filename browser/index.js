@@ -156,7 +156,14 @@ module.exports = {
 
         modalHelp = document.getElementById('aau-help-modal');
         modalElHelp = new bootstrap.Modal(modalHelp);
-        $('#aau-step-modal-body').html(`Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.`);
+        let startText;
+        if (urlparser.urlVars?.start === '1') {
+            startText = "Zoom ind, indtil kortet skifter til et luftfoto. Klik eller tryk på kortet for at angive stedet. Flyt prikken ved at trykke og holde, mens du flytter den.";
+        }
+        else {
+            startText = "Følg vejledningen nederst på siden. Klik næste, når du er klar til at begynde.";
+        }
+        $('#aau-step-modal-body').html(startText);
         const modalEl = document.getElementById('aau-step-modal')
         const modal = new bootstrap.Modal(modalEl)
         modal.show()
@@ -193,7 +200,7 @@ module.exports = {
                         return;
                     }
                     if (currentZoom <= SWITCH_LEVEL) {
-                        alert('Du skal zoome tættere på, inden du kan markere, hvor det skete. Zoom ind, indtil kortet skifter til et luftfoto.');
+                        new bootstrap.Modal('#zoomWarn').show();
                         return;
                     }
                     clicktimer = setTimeout(function () {
