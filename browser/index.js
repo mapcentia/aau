@@ -154,7 +154,8 @@ module.exports = {
             return Object.keys(state.symbolState).length;
         }
 
-        modalHelp = document.getElementById('aau-help-modal');
+        const elId = urlparser.urlVars?.start === '1' ? 'aau-help-modal-1': 'aau-help-modal-2';
+        modalHelp = document.getElementById(elId);
         modalElHelp = new bootstrap.Modal(modalHelp);
         let startText;
         if (urlparser.urlVars?.start === '1') {
