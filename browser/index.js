@@ -42,10 +42,10 @@ module.exports = {
     init: function () {
 
         const switchBaseLayer = (z, init = false) => {
+            const b = urlparser.urlVars?.start === '1' ? 'geodanmark_2020_12_5cm': 'geodanmark_2020_12_5cm_min_20';
             if (z > SWITCH_LEVEL && (currentZoom <= SWITCH_LEVEL || init)) {
-                setBaseLayer.init('geodanmark_2020_12_5cm');
+                setBaseLayer.init(b);
             }
-
             if (z <= SWITCH_LEVEL && (currentZoom > SWITCH_LEVEL || init)) {
                 setBaseLayer.init('osm');
             }
