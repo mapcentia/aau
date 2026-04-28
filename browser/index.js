@@ -14,7 +14,7 @@ let switchLayer;
 const urlparser = require('../../../browser/modules/urlparser');
 const config = require('../../../config/config.js');
 
-const SWITCH_LEVEL = 19;
+const SWITCH_LEVEL = 18;
 
 let setBaseLayer;
 module.exports = {
@@ -234,7 +234,14 @@ module.exports = {
                                     "expression": "=",
                                     "value": urlparser.urlVars.userid,
                                     "restriction": false
-                                }, {
+                                },
+                                {
+                                    "fieldname": "usergr",
+                                    "expression": "=",
+                                    "value": urlparser.urlVars.gr,
+                                    "restriction": false
+                                },
+                                {
                                     "fieldname": "file",
                                     "expression": "=",
                                     "value": "red_dot.svg",
