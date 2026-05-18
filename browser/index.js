@@ -40,7 +40,7 @@ module.exports = {
      *
      */
     init: function () {
-
+        let redDotIsSet = false;
         const switchBaseLayer = (z, init = false) => {
             const b = 'orto_foraar_webm';
             if (z > SWITCH_LEVEL && (currentZoom <= SWITCH_LEVEL || init)) {
@@ -190,9 +190,17 @@ module.exports = {
         mapObj.on('dblclick', function () {
             clicktimer = undefined;
         });
+        let q;
         if (urlparser.urlVars?.start === '1') {
+            q = `SELECT id as gid, rotation, scale, zoom, svg, browserid, anonymous, file,
+                                       userid AS usergr, tag, properties,
+                                   st_asgeojson(the_geom)::json AS the_geom
+                            FROM settings.symbols
+                            WHERE browserid = '${urlparser.urlVars.userid}' AND deleted = false and file = 'red_dot.svg'`;
+
             $('#confirm2').show();
             mapObj.on('click', function (e) {
+                if (redDotIsSet) return;
                 let event = new geocloud.clickEvent(e, cloud);
                 if (clicktimer) {
                     clearTimeout(clicktimer);
@@ -222,6 +230,12 @@ module.exports = {
                 }
             });
         } else {
+            q = `SELECT id as gid, rotation, scale, zoom, svg, browserid, anonymous, file,
+                                       userid AS usergr, tag, properties,
+                                   st_asgeojson(the_geom)::json AS the_geom
+                            FROM settings.symbols
+                            WHERE browserid = '${urlparser.urlVars.userid}' AND deleted = false and file != 'red_dot.svg'`;
+
             let flag = false
             backboneEvents.get().on(`layerTree:ready`, (loadedLayerName) => {
                 if (!flag) {
@@ -250,9 +264,7 @@ module.exports = {
                             ]
                         }
                     layerTree.onApplyArbitraryFiltersHandler({layerKey: 'public.symbols', filters});
-                    switchLayer.init('v:public.symbols', true).then(() => {
-
-                    })
+                    switchLayer.init('v:public.symbols', true);
                     backboneEvents.get().once("allDoneLoading:layers", function (e) {
                         const map = cloud.get();
                         const layer = map.getLayersByName('v:public.symbols');
@@ -267,6 +279,45 @@ module.exports = {
                 $('#confirm1').show();
             }
         }
+
+        fetch('/api/sql/survey', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ q, format: 'json' , srs: 4326 })
+        }).then(response => response.json()).then(data => {
+            const symbolState = {};
+            if (data.data.length > 0) {
+                redDotIsSet = true;
+                $('#confirm1').hide();
+                data.data.forEach(d => {
+                    if (urlparser.urlVars?.start === '1' && d.file === 'red_dot.svg' ) {
+                        setTimeout(() => {
+                            cloud.get().map.setView([d.the_geom.coordinates[1], d.the_geom.coordinates[0]], 19);
+                        }, 100);
+                    }
+                    symbolState[d.gid] = {
+                        svg: d.svg,
+                        file: d.file,
+                        coord: {lat: d.the_geom.coordinates[1], lng: d.the_geom.coordinates[0]},
+                        scale: d.scale, rotation: d.rotation, zoomLevel: d.zoom, group: d.usergr,
+                    };
+                })
+                window.api.setSymbol({
+                    locked: false,
+                    autoScale: false,
+                    symbolState,
+                })
+            }
+            if (data.data.length > 1) {
+                $('#confirm2').show();
+                $('.symbols-delete').hide();
+                $('#vidi_symbols').hide();
+
+            }
+        })
+
         mapObj.on('zoomend', () => {
             const z = mapObj.getZoom();
             switchBaseLayer(z);
