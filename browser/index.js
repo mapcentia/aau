@@ -280,7 +280,7 @@ module.exports = {
             }
         }
 
-        fetch('/api/sql/survey', {
+        fetch('/api/sql/nocache/survey', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -295,7 +295,7 @@ module.exports = {
                     if (urlparser.urlVars?.start === '1' && d.file === 'red_dot.svg' ) {
                         setTimeout(() => {
                             cloud.get().map.setView([d.the_geom.coordinates[1], d.the_geom.coordinates[0]], 19);
-                        }, 100);
+                        }, 200);
                     }
                     symbolState[d.gid] = {
                         svg: d.svg,
